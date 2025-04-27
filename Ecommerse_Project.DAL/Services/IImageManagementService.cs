@@ -9,7 +9,7 @@ namespace Ecommerse_Project.BLL.Services
 {
     public interface IImageManagementService
     {
-        Task<List<string>>AddImageAsync(IFormFileCollection files,string src);
-        Task DeleteImageAsync(string src);
+        Task<List<string>> AddImageAsync(IFormFileCollection files, string mainCategory, string subCategory, int productId);
+        void DeleteImageAsync(string imageUrl);
     }
 }
