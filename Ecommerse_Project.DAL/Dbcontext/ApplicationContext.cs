@@ -323,6 +323,10 @@ namespace Ecommerse_Project.DAL.Dbcontext
 
 
         }
+
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartProduct> CartProducts { get; set; }
+
         public DbSet<Customer> Customers {  get; set; }
         public DbSet<Address> Addresss { get; set; }
         public DbSet<Product> Products { get; set; }
