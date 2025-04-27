@@ -3,13 +3,16 @@ using Ecommerce__Project.Api.Mappings;
 using Ecommerse_Project.BLL.Dtos.UserAuthenticationDtos;
 using Ecommerse_Project.BLL.Interfaces;
 using Ecommerse_Project.BLL.Manager;
+using Ecommerse_Project.BLL.Services;
 using Ecommerse_Project.DAL.Dbcontext;
 using Ecommerse_Project.DAL.Entities;
 using Ecommerse_Project.DAL.Interfaces;
 using Ecommerse_Project.DAL.Repositories;
+using Ecommerse_Project.DAL.Repositories.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +32,8 @@ builder.Services.AddDbContext<ApplicationContext>(option =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
+builder.Services.AddScoped<IImageManagementService,ImageManagementService>();   
 builder.Services.AddScoped<IuserAuthenticationManager, UserAuthenticationManager>();    
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddHttpContextAccessor();

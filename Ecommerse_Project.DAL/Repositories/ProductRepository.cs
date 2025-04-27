@@ -14,6 +14,7 @@ namespace Ecommerse_Project.DAL.Repositories
     {
         public ProductRepository(ApplicationContext context) : base(context)
         {
+            
         }
     }
 }

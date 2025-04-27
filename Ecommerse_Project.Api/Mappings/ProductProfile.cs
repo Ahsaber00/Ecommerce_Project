@@ -13,7 +13,13 @@ namespace Ecommerce__Project.Api.Mappings
                 ().ForMember(p=>p.CategoryName,
                 m=>m.MapFrom(src=>src.Category.Name));
             CreateMap<Product, ProductDetailsDto>();
-            
+            CreateMap<CreateProductDto, Product>()
+                .ForMember(pDto => pDto.Images, options => options.Ignore())
+                .ReverseMap();
+            CreateMap<UpdateProductDto, Product>()
+                .ForMember(pDto => pDto.Images, options => options.Ignore())
+                .ReverseMap();
+
         }
     }
 }
