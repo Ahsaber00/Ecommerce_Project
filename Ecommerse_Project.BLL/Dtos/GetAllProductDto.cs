@@ -11,6 +11,7 @@ namespace Ecommerse_Project.BLL.Dtos
 {
     public class GetAllProductDto
     {
+        public int Id { get; set; } 
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }

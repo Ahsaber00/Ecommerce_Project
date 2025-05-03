@@ -9,8 +9,8 @@ namespace Ecommerse_Project.BLL.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
+        Task<IQueryable<T>> GetAllAsync();
+        Task<IQueryable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes);
         Task<T> GetByIdAsync(int id);
         Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes);
         Task AddAsync(T entity);

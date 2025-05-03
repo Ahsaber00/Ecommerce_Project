@@ -11,5 +11,6 @@ namespace Ecommerse_Project.DAL.Interfaces
     public interface ICategoryRepository:IGenericRepository<Category>
     {
         //Add Specific methods needed for the category
+        
     }
 }

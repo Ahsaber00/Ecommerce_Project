@@ -30,10 +30,27 @@ builder.Services.AddDbContext<ApplicationContext>(option =>
 }, ServiceLifetime.Scoped);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+// Register the generic repository to be used by the project repositories
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+
+// Register UnitOfWork (which includes repositories)
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddSingleton<IFileProvider>(new PhysicalFileProvider(Directory.GetCurrentDirectory()));
-builder.Services.AddScoped<IImageManagementService,ImageManagementService>();   
+
+
+//For image handling in the wwwroot
+builder.Services.AddSingleton<IFileProvider>(provider =>
+    new PhysicalFileProvider(Path.Combine(builder.Environment.WebRootPath)));
+
+builder.Services.AddScoped<IImageManagementService,ImageManagementService>();
+
+
+// Register managers
+builder.Services.AddScoped<IProductManager, ProductManager>();
+builder.Services.AddScoped<ICategoryManager, CategoryManager>();
+//builder.Services.AddScoped<IImageManager, ImageManager>();
 builder.Services.AddScoped<IuserAuthenticationManager, UserAuthenticationManager>();    
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddHttpContextAccessor();
@@ -72,7 +89,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();

@@ -13,6 +13,8 @@ namespace Ecommerse_Project.DAL.Repositories
     {
         public CategoryRepository(ApplicationContext context) : base(context)
         {
+
         }
+        
     }
 }

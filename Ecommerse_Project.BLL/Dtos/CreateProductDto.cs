@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,8 @@ namespace Ecommerse_Project.BLL.Dtos
         public string Material { get; set; }
         public string Color { get; set; }
         public string Size { get; set; }
-        public int CategoryId { get; set; }
+        [Required]
+        public int SubCategoryId { get; set; }
         public int AdminID { get; set; }
         public IFormFileCollection Images { get; set; }
     }
