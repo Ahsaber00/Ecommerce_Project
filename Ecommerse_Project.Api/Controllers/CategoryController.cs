@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ecommerse_Project.BLL.Dtos;
+using Ecommerse_Project.BLL.Manager;
 using Ecommerse_Project.DAL.Entities;
 using Ecommerse_Project.DAL.Interfaces;
 using Ecommerse_Project.DAL.Repositories;
@@ -12,12 +13,12 @@ namespace Ecommerce__Project.Api.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        public CategoryController(IUnitOfWork unitOfWork, IMapper mapper)
+        
+        private readonly ICategoryManager _categoryManager;
+        public CategoryController(ICategoryManager categoryManager)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            
+            _categoryManager = categoryManager;
         }
 
         [HttpGet]
@@ -25,7 +26,7 @@ namespace Ecommerce__Project.Api.Controllers
         {
             try
             {
-                var categories = await _unitOfWork.Categories.GetAllAsync();
+                var categories = await _categoryManager.GetAllAsync();
                 if (categories == null)
                 {
                     return BadRequest();
@@ -40,16 +41,16 @@ namespace Ecommerce__Project.Api.Controllers
         }
 
 
-        [HttpGet("id")]
+        [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById([FromRoute]int id)
         {
             try
             {
-                var category=await _unitOfWork.Categories.GetByIdAsync(id);
-                if (category == null)
-                {
-                    return NotFound();
-                }
+                var category=await _categoryManager.GetByIdAsync(id);
+                //if (category == null)
+                //{
+                //    return NotFound();
+                //}
                 return Ok(category);
             }
             catch(Exception ex)
@@ -63,9 +64,7 @@ namespace Ecommerce__Project.Api.Controllers
         {
             try
             {
-                Category newCategory = _mapper.Map<Category>(dto);
-                await _unitOfWork.Categories.AddAsync(newCategory);
-                await _unitOfWork.SaveAll();
+                var newCategory=await _categoryManager.AddAsync(dto);
                 return CreatedAtAction(nameof(GetById), new {id=newCategory.Id},newCategory);
             }
             catch (Exception ex)
@@ -79,11 +78,8 @@ namespace Ecommerce__Project.Api.Controllers
         {
             try
             {
-                var category=_mapper.Map<Category>(dto);
-                _unitOfWork.Categories.UpdateAsync(category);
-                await _unitOfWork.SaveAll();
-
-                return Ok(new { message = "Category updated successfully" });
+                var updatedCategory=await _categoryManager.UpdateAsync(dto);
+                return Ok(updatedCategory);
             }
             catch (Exception ex)
             {
@@ -97,9 +93,13 @@ namespace Ecommerce__Project.Api.Controllers
         {
             try
             {
-                await _unitOfWork.Categories.DeleteAsync(id);
-                await _unitOfWork.SaveAll();
-                return Ok(new {massege= "Deleted successfully."});
+               var result= await _categoryManager.DeleteAsync(id);
+                if (result)
+                {
+                    return Ok(new { massege = "Deleted successfully." });
+                }
+                return BadRequest("Category not found");
+                
             }
             catch (Exception ex)
             {

@@ -18,23 +18,24 @@ namespace Ecommerse_Project.DAL.Repositories
         {
             _context = context;
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IQueryable<T>> GetAllAsync()
         {
-            return await _context.Set<T>().AsNoTracking().ToListAsync();
+            return _context.Set<T>().AsNoTracking();
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            //return await _context.Set<T>().FindAsync(id);
+            return await _context.Set<T>().FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
         }
-        public async Task<IEnumerable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
+        public async Task<IQueryable<T>> GetAllAsync(params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
             foreach (var include in includes)
             {
                query= query.Include(include);
             }
-            return await query.ToListAsync();
+            return query;
         }
 
         public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)

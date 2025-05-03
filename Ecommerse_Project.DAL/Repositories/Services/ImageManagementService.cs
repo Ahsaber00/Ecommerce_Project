@@ -13,6 +13,11 @@ namespace Ecommerse_Project.DAL.Repositories.Services
     public class ImageManagementService : IImageManagementService
     {
         private readonly IFileProvider _fileProvider;
+        public ImageManagementService(IFileProvider fileProvider)
+        {
+            _fileProvider = fileProvider;
+            
+        }
 
         public async Task<List<string>> AddImageAsync(IFormFileCollection files, string mainCategory, string subCategory, int productId)
         {
@@ -44,7 +49,17 @@ namespace Ecommerse_Project.DAL.Repositories.Services
 
         public void DeleteImageAsync(string imageUrl)
         {
+            if (string.IsNullOrEmpty(imageUrl))
+            {
+                throw new ArgumentNullException(nameof(imageUrl), "Image URL cannot be null or empty.");
+            }
+
             var imageInfo = _fileProvider.GetFileInfo(imageUrl);
+            if (!imageInfo.Exists)
+            {
+                throw new FileNotFoundException($"Image not found at {imageUrl}");
+            }
+           
             if (!imageInfo.Exists)
             {
               
@@ -53,7 +68,7 @@ namespace Ecommerse_Project.DAL.Repositories.Services
 
             var root = imageInfo.PhysicalPath;
             
-             File.Delete(imageUrl);
+             File.Delete(root);
         }
     }
 }

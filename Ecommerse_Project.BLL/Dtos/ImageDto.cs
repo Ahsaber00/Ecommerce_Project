@@ -8,7 +8,7 @@ namespace Ecommerse_Project.BLL.Dtos
 {
     public class ImageDto
     {
-        public string ImageFileName { get; set; }
+        public string ImageUrl { get; set; }
         public int ProductId { get; set; }
     }
 }
