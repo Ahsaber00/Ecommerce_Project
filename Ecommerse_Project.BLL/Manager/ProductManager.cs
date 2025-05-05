@@ -75,14 +75,14 @@ namespace Ecommerse_Project.BLL.Manager
             }
 
             // Delete associated images
-            if (product.Images != null && product.Images.Count>0)
-            {
-                foreach (var image in product.Images)
-                {
-                    _imageManagementService.DeleteImageAsync(image.Url);
-                    await _unitOfWork.Images.DeleteAsync(image.Id);
-                }
-            }
+            //if (product.Images != null && product.Images.Count>0)
+            //{
+            //    foreach (var image in product.Images)
+            //    {
+            //        _imageManagementService.DeleteImageAsync(image.Url);
+            //        await _unitOfWork.Images.DeleteAsync(image.Id);
+            //    }
+            //}
 
             // Delete the product
             await _unitOfWork.Products.DeleteAsync(id);
