@@ -10,7 +10,7 @@ namespace Ecommerse_Project.BLL.Manager
 {
     public interface IProductManager
     {
-        Task<IEnumerable<GetAllProductDto>> GetAllProductsAsync();
+        Task<PaginatedProductResultDto> GetAllProductsAsync(ProductFilterDto? filter);
         Task<ProductDetailsDto> GetByIdAsync(int id);
         Task<ProductDetailsDto> AddAsync(CreateProductDto productDto);
         Task<ProductDetailsDto>UpdateAsync(UpdateProductDto productDto);
