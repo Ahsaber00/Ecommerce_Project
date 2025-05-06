@@ -9,9 +9,10 @@ namespace Ecommerse_Project.DAL.Interfaces
 {
     public interface IUnitOfWork
     {
-        public IProductRepository Products { get;}
-        public ICategoryRepository Categories { get;}
-        public IImageRepository Images { get;}
+        public IProductRepository Products { get; }
+        public ICategoryRepository Categories { get; }
+        public IImageRepository Images { get; }
+        public IaccountReposatory Accounts { get; }
         public Task<bool> SaveAll();
     }
 }

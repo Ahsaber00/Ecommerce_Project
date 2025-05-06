@@ -15,12 +15,12 @@ namespace Ecommerse_Project.DAL.Entities
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Description {  get; set; }
+        public string Description { get; set; }
         [Required]
         [Precision(18, 2)]
         public decimal Price { get; set; }
         [Required]
-        public int Stock {  get; set; }
+        public int Stock { get; set; }
         public DateTime AddedAt { get; set; }
 
 
@@ -34,12 +34,14 @@ namespace Ecommerse_Project.DAL.Entities
 
 
         public int CategoryId { get; set; }
-        public int AdminID {  get; set; }
+        public string AdminId { get; set; }
+
         public virtual ICollection<CartProduct> Carts { get; set; }
-       public virtual Category Category { get; set; }
-        public virtual ICollection<CustomerProductReview> CustomerReviews { get; set; }
-        public virtual ICollection<Image>Images { get; set; }
-        public virtual ICollection<WishListProduct>WishLists { get; set; }
+        public virtual Category Category { get; set; }
+
+        public virtual ICollection<Image> Images { get; set; }
+        public virtual ICollection<WishListProduct> WishLists { get; set; }
+       
 
     }
 }

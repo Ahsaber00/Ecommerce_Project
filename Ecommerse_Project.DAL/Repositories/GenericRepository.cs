@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerse_Project.DAL.Repositories
 {
-    
+
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly ApplicationContext _context;
@@ -33,9 +33,23 @@ namespace Ecommerse_Project.DAL.Repositories
             IQueryable<T> query = _context.Set<T>().AsNoTracking();
             foreach (var include in includes)
             {
-               query= query.Include(include);
+                query = query.Include(include);
             }
             return query;
+        }
+
+        public async Task<T> GetByIdAsync(string id, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _context.Set<T>().AsQueryable();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            var entity = await query.FirstOrDefaultAsync(x => EF.Property<string>(x, "Id") == id);
+
+            return entity;
         }
 
         public async Task<T> GetByIdAsync(int id, params Expression<Func<T, object>>[] includes)
@@ -43,9 +57,9 @@ namespace Ecommerse_Project.DAL.Repositories
             var query = _context.Set<T>().AsQueryable();
             foreach (var include in includes)
             {
-                query=query.Include(include);
+                query = query.Include(include);
             }
-            var entity= await query.FirstOrDefaultAsync(x => EF.Property<int>(x, "Id") == id);
+            var entity = await query.FirstOrDefaultAsync(x => EF.Property<int>(x, "Id") == id);
             return entity;
         }
 
@@ -56,8 +70,8 @@ namespace Ecommerse_Project.DAL.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var entity=await _context.Set<T>().FindAsync(id);
-            if(entity != null)
+            var entity = await _context.Set<T>().FindAsync(id);
+            if (entity != null)
             {
                 _context.Set<T>().Remove(entity);
             }

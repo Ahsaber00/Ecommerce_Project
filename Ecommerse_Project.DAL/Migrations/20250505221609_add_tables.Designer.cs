@@ -4,6 +4,7 @@ using Ecommerse_Project.DAL.Dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerse_Project.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250505221609_add_tables")]
+    partial class add_tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,66 +204,6 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Men"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Women"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "T-Shirts",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "Shirts",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "Jeans",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Shoes",
-                            ParentCategoryId = 1
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "Dresses",
-                            ParentCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "Blouses",
-                            ParentCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "Skirts",
-                            ParentCategoryId = 2
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Heels",
-                            ParentCategoryId = 2
-                        });
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Image", b =>
@@ -411,248 +354,6 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6126),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Nike",
-                            CategoryId = 4,
-                            Color = "Black",
-                            Description = "Comfortable and breathable cotton T-shirt, ideal for daily wear.",
-                            Material = "Cotton",
-                            Name = "Nike Cotton T-Shirt",
-                            Price = 29.99m,
-                            Size = "M",
-                            Stock = 50
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6185),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Adidas",
-                            CategoryId = 4,
-                            Color = "White",
-                            Description = "Lightweight performance T-shirt made from premium polyester.",
-                            Material = "Polyester",
-                            Name = "Adidas Polyester T-Shirt",
-                            Price = 34.99m,
-                            Size = "L",
-                            Stock = 40
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6193),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Ralph Lauren",
-                            CategoryId = 5,
-                            Color = "Light Blue",
-                            Description = "Elegant cotton shirt suitable for formal occasions.",
-                            Material = "Cotton",
-                            Name = "Ralph Lauren Cotton Shirt",
-                            Price = 79.99m,
-                            Size = "L",
-                            Stock = 30
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6198),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Tommy Hilfiger",
-                            CategoryId = 5,
-                            Color = "White",
-                            Description = "Stylish and breathable linen shirt for summer days.",
-                            Material = "Linen",
-                            Name = "Tommy Hilfiger Linen Shirt",
-                            Price = 85.50m,
-                            Size = "M",
-                            Stock = 20
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6202),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Levi's",
-                            CategoryId = 6,
-                            Color = "Dark Blue",
-                            Description = "Classic fit jeans crafted from durable denim material.",
-                            Material = "Denim",
-                            Name = "Levi's Denim Jeans",
-                            Price = 69.99m,
-                            Size = "32",
-                            Stock = 60
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6208),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Diesel",
-                            CategoryId = 6,
-                            Color = "Black",
-                            Description = "Trendy slim-fit jeans with a modern look.",
-                            Material = "Denim",
-                            Name = "Diesel Slim Fit Jeans",
-                            Price = 99.99m,
-                            Size = "34",
-                            Stock = 25
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6213),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Nike",
-                            CategoryId = 7,
-                            Color = "White",
-                            Description = "Lightweight running shoes with maximum cushioning.",
-                            Material = "Synthetic",
-                            Name = "Nike Running Shoes",
-                            Price = 120.00m,
-                            Size = "43",
-                            Stock = 35
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6217),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Timberland",
-                            CategoryId = 7,
-                            Color = "Brown",
-                            Description = "Durable leather boots designed for rough terrains.",
-                            Material = "Leather",
-                            Name = "Timberland Leather Boots",
-                            Price = 150.00m,
-                            Size = "44",
-                            Stock = 20
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6222),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Zara",
-                            CategoryId = 8,
-                            Color = "Red",
-                            Description = "Light cotton dress perfect for summer outings.",
-                            Material = "Cotton",
-                            Name = "Zara Summer Dress",
-                            Price = 59.99m,
-                            Size = "M",
-                            Stock = 40
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6227),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "H&M",
-                            CategoryId = 8,
-                            Color = "Black",
-                            Description = "Elegant silk evening dress for special occasions.",
-                            Material = "Silk",
-                            Name = "H&M Silk Evening Dress",
-                            Price = 120.00m,
-                            Size = "S",
-                            Stock = 15
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6232),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Mango",
-                            CategoryId = 9,
-                            Color = "Pink",
-                            Description = "Stylish chiffon blouse suitable for office and casual wear.",
-                            Material = "Chiffon",
-                            Name = "Mango Chiffon Blouse",
-                            Price = 45.00m,
-                            Size = "S",
-                            Stock = 50
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6236),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Forever 21",
-                            CategoryId = 9,
-                            Color = "White",
-                            Description = "Casual cotton blouse for everyday style.",
-                            Material = "Cotton",
-                            Name = "Forever 21 Cotton Blouse",
-                            Price = 35.00m,
-                            Size = "M",
-                            Stock = 45
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6240),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Zara",
-                            CategoryId = 10,
-                            Color = "Black",
-                            Description = "Trendy high waist skirt for a modern chic look.",
-                            Material = "Polyester",
-                            Name = "Zara High Waist Skirt",
-                            Price = 49.99m,
-                            Size = "M",
-                            Stock = 30
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6244),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "H&M",
-                            CategoryId = 10,
-                            Color = "Beige",
-                            Description = "Comfortable and versatile cotton skirt.",
-                            Material = "Cotton",
-                            Name = "H&M Cotton Skirt",
-                            Price = 39.99m,
-                            Size = "S",
-                            Stock = 25
-                        },
-                        new
-                        {
-                            Id = 15,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6248),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Aldo",
-                            CategoryId = 11,
-                            Color = "Nude",
-                            Description = "Elegant leather heels perfect for formal events.",
-                            Material = "Leather",
-                            Name = "Aldo Leather Heels",
-                            Price = 99.99m,
-                            Size = "38",
-                            Stock = 20
-                        },
-                        new
-                        {
-                            Id = 16,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6253),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            Brand = "Steve Madden",
-                            CategoryId = 11,
-                            Color = "Red",
-                            Description = "Bold red heels to complete any party look.",
-                            Material = "Synthetic",
-                            Name = "Steve Madden Red Heels",
-                            Price = 110.00m,
-                            Size = "37",
-                            Stock = 15
-                        });
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.TrackingDetails", b =>
@@ -852,16 +553,16 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            Id = "9ca155cd-b1e8-4b1f-97ae-8be2ec854ded",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "db1aee00-bf5f-42de-b489-4425d49a16e8",
+                            ConcurrencyStamp = "4ae86b73-a5c0-44db-811d-ca962db4d550",
                             Email = "Admin@mail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAENvThIkEjuqQrmfR94dntYlpbazGff59RmforO4piDe2lnM6Z81exgKu/QS0docypA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDPhZK88KpKPBNG4WX9gx5YrzGlH9ULRYkYygqixfYzLRpoG3Pa5hNbzrSY36dA2PA==",
                             PhoneNumberConfirmed = false,
                             Role = 0,
-                            SecurityStamp = "d938599f-f5b1-4a91-af84-281054911ba5",
+                            SecurityStamp = "ed65ecb5-958c-4aff-9ad6-de9be1855de7",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });

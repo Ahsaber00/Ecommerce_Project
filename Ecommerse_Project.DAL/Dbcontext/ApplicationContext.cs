@@ -18,19 +18,35 @@ namespace Ecommerse_Project.DAL.Dbcontext
         {
             base.OnModelCreating(builder);
 
-    
-            builder.Entity<CartProduct>().HasKey(a => new { a.ProductId, a.CartId });
-            builder.Entity<CartProduct>().HasOne(a => a.Product).WithMany(a => a.Carts).HasForeignKey(a => a.ProductId);
-            builder.Entity<CartProduct>().HasOne(a => a.Cart).WithMany(a => a.Products).HasForeignKey(c => c.CartId);
 
-            builder.Entity<CustomerProductReview>().HasKey(a => new { a.ProductId,a.CustomerId });
-            builder.Entity<CustomerProductReview>().HasOne(a => a.Product).WithMany(a => a.CustomerReviews).HasForeignKey(a=>a.ProductId);
-            builder.Entity<CustomerProductReview>().HasOne(a => a.Customer).WithMany(a => a.ProductReviews).HasForeignKey(c => c.CustomerId);
+            builder.ApplyConfiguration(new CartProductConfig());
+            builder.ApplyConfiguration(new WishListProductConfig());
+          
 
-            builder.Entity<WishListProduct>().HasKey(a => new { a.ProductId, a.WishlistId });
-            builder.Entity<WishListProduct>().HasOne(a => a.Product).WithMany(a => a.WishLists).HasForeignKey(a => a.ProductId);
-            builder.Entity<WishListProduct>().HasOne(a => a.Wishlist).WithMany(a => a.Products).HasForeignKey(c => c.WishlistId);
+            //category seeding
 
+
+
+
+
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
+
+
+            var adminUser = new Admin
+            {
+                UserName = "Admin",
+                Email = "Admin@mail.com",
+
+
+
+            };
+
+
+            // Hash the password and set it to the PasswordHash property
+            adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, " ");
+
+            // Seed the admin user into the database
+            builder.Entity<Admin>().HasData(adminUser);
             //category seeding
             List<Category> categories = new List<Category>()
             {
@@ -64,7 +80,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Black",
                 Size = "M",
                 CategoryId = 4,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -79,7 +95,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "White",
                 Size = "L",
                 CategoryId = 4,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
 
             // ----------- Men - Shirts (CategoryId = 5) -----------
@@ -96,7 +112,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Light Blue",
                 Size = "L",
                 CategoryId = 5,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -111,7 +127,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "White",
                 Size = "M",
                 CategoryId = 5,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
 
             // ----------- Men - Jeans (CategoryId = 6) -----------
@@ -128,7 +144,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Dark Blue",
                 Size = "32",
                 CategoryId = 6,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -143,7 +159,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Black",
                 Size = "34",
                 CategoryId = 6,
-                AdminID = 1
+               AdminId = adminUser.Id
             },
 
             // ----------- Men - Shoes (CategoryId = 7) -----------
@@ -160,7 +176,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "White",
                 Size = "43",
                 CategoryId = 7,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -175,7 +191,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Brown",
                 Size = "44",
                 CategoryId = 7,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
 
             // ----------- Women - Dresses (CategoryId = 8) -----------
@@ -192,7 +208,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Red",
                 Size = "M",
                 CategoryId = 8,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -207,7 +223,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Black",
                 Size = "S",
                 CategoryId = 8,
-                AdminID = 1
+              AdminId    = adminUser.Id
             },
 
             // ----------- Women - Blouses (CategoryId = 9) -----------
@@ -224,7 +240,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Pink",
                 Size = "S",
                 CategoryId = 9,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -239,7 +255,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "White",
                 Size = "M",
                 CategoryId = 9,
-                AdminID = 1
+               AdminId = adminUser.Id
             },
 
             // ----------- Women - Skirts (CategoryId = 10) -----------
@@ -256,7 +272,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Black",
                 Size = "M",
                 CategoryId = 10,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -271,7 +287,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Beige",
                 Size = "S",
                 CategoryId = 10,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
 
             // ----------- Women - Heels (CategoryId = 11) -----------
@@ -288,7 +304,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Nude",
                 Size = "38",
                 CategoryId = 11,
-                AdminID = 1
+                AdminId = adminUser.Id
             },
             new Product
             {
@@ -303,23 +319,15 @@ namespace Ecommerse_Project.DAL.Dbcontext
                 Color = "Red",
                 Size = "37",
                 CategoryId = 11,
-                AdminID = 1
+                AdminId = adminUser.Id
             }
         };
 
-
-
-
-            builder.Entity<Admin>().HasData(new Admin
-            {
-                Id = 1,
-                Name = "Admin User",
-                Email = "admin@example.com",
-                Password = "hashedpassword",
-            });
             builder.Entity<Category>().HasData(categories);
             builder.Entity<Product>().HasData(products);
-            
+
+
+
 
 
         }
@@ -329,7 +337,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
         public DbSet<Category> Categories { get; set; }
         public DbSet <Wishlist> Wishlist { get; set; }
         public DbSet<Admin> Admins { get; set; }
-        public DbSet<CustomerProductReview> CustomerProductReviews { get; set; }
+
         public DbSet<Image> Images { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Paymen>Paymens { get; set; }

@@ -15,12 +15,12 @@ namespace Ecommerse_Project.DAL.Entities
         [Required]
         public decimal Cost { get; set; }
         [MaxLength(100)]
-        public string Status {  get; set; }
+        public string Status { get; set; }
         public DateTime Date { get; set; }
-         public int CustomerId {  get; set; }
-        public int AdressId {  get; set; }
-        public int PaymentId {  get; set; }
-        public int TrackingDetailsId {  get; set; }
+        public string CustomerId { get; set; }
+        public int AdressId { get; set; }
+        public int PaymentId { get; set; }
+        public int TrackingDetailsId { get; set; }
 
     }
 }

@@ -6,8 +6,10 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Ecommerse_Project.BLL.Dtos;
-using Ecommerse_Project.BLL.Dtos.UserAuthenticationDtos;
+
+using Ecommerse_Project.BLL.Dtos.UserDtos;
 using Ecommerse_Project.DAL.Entities;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -20,129 +22,91 @@ namespace Ecommerse_Project.BLL.Manager
     public class UserAuthenticationManager : IuserAuthenticationManager
     {
         private readonly UserManager<ApplicationUser> _user;
-       
+        private readonly RoleManager<IdentityRole> _roleManager;
+
         private readonly JwtSettings _jwtSettings;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public UserAuthenticationManager(UserManager<ApplicationUser> user, IOptions<JwtSettings> jwtSettings, IHttpContextAccessor httpContextAccessor)
+
+        public UserAuthenticationManager(UserManager<ApplicationUser> user, IOptions<JwtSettings> jwtSettings, RoleManager<IdentityRole> roleManager)
         {
+            _roleManager = roleManager;
             _user = user;
             _jwtSettings = jwtSettings.Value;
-            _httpContextAccessor = httpContextAccessor;
+
         }
 
-        public async Task<AccountDetailsDto> AccountDetails()
+
+        private List<Claim> GetStaticClaims(ApplicationUser user)
         {
-            var userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(a => a.Type == ClaimTypes.NameIdentifier)?.Value;
-           ;
-            var user=await _user.FindByIdAsync(userId);
-            if (user == null) {
-                return null;
-            }
-            AccountDetailsDto accountDetails = new AccountDetailsDto
-            {
-                Email = user.Email
-                ,
-                Name = user.UserName
+            return new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.UserName),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.NameIdentifier, user.Id),
+        new Claim(ClaimTypes.Role, user.Role.ToString())
+    };
+        }
+        public async Task<AuthResult> Login(LoginDto login)
+        {
 
-            };
-            return accountDetails;
-            
+            var user = await _user.FindByEmailAsync(login.Email);
+            if (user == null) { return new AuthResult { IsSuccess = false, Message = "Invalid email or password" }; }
+            var check_password = await _user.CheckPasswordAsync(user, login.Password);
+            if (check_password == false) { return new AuthResult { IsSuccess = false, Message = "Invalid email or password" }; }
+            var claims = GetStaticClaims(user);
+            var token = CreateToken(claims);
+            return new AuthResult { IsSuccess = true, Token = token.AccessToken };
 
-           
         }
 
-        public async Task<string> Login(LoginDto login)
+        public async Task<AuthResult> Register(RegisterDto register)
         {
-    
-            var user=await _user.FindByEmailAsync(login.Email);
-            if (user == null) {return null;}
-            var check_password=await _user.CheckPasswordAsync(user,login.Password);
-            if (check_password == false) { return null; }
-          var claims=await _user.GetClaimsAsync(user);
-            return CreateToken(claims);
-        
-        }
+            ApplicationUser user = new Customer();
 
-        public async Task<string> Register(RegisterDto register,string Role)
-        {
-            ApplicationUser user = new ApplicationUser();
             user.UserName = register.Name;
             user.Email = register.Email;
-            var create_user =await _user.CreateAsync(user,register.Password);
+
+            var create_user = await _user.CreateAsync(user, register.Password);
+
             if (create_user.Succeeded)
             {
-                List<Claim> claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Name,register.Name));
-                claims.Add(new Claim(ClaimTypes.Email,register.Email));
-                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-                claims.Add(new Claim(ClaimTypes.Role, Role));
+                // Set role after successful creation
+
+                var defaultRole = user.Role.ToString();
+                if (!await _roleManager.RoleExistsAsync(defaultRole))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(defaultRole));
+                }
+                var add_role = await _user.AddToRoleAsync(user, defaultRole);
+
+                var claims = GetStaticClaims(user);
                 await _user.AddClaimsAsync(user, claims);
-                return CreateToken(claims);
+
+                var token = CreateToken(claims);
+                return new AuthResult { IsSuccess = true, Token = token.AccessToken };
             }
+
             var errors = string.Join(" | ", create_user.Errors.Select(e => e.Description));
-            throw new Exception($"User creation failed: {errors}");
-            return null;
-            
-            
+            return new AuthResult { IsSuccess = false, Message = $"User creation failed: {errors}" };
         }
-        public string CreateToken(IList<Claim> claims)
+        public JwtAuthResult CreateToken(IList<Claim> claims)
         {
-           
-            var endcodeKey=Encoding.ASCII.GetBytes(_jwtSettings.Key);
+
+            var endcodeKey = Encoding.ASCII.GetBytes(_jwtSettings.Key);
             var key = new SymmetricSecurityKey(endcodeKey);
-            SigningCredentials credentials=new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
-            var ExpireDate=DateTime.UtcNow.AddDays(1);
-            JwtSecurityToken jwtSecurity = new JwtSecurityToken(claims:claims,expires: ExpireDate, signingCredentials:credentials);
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var expireDate = DateTime.UtcNow.AddDays(_jwtSettings.DurationInDays);
+            var jwtSecurity = new JwtSecurityToken(
+                           issuer: _jwtSettings.Issuer,
+                           audience: _jwtSettings.Audience,
+                           claims: claims,
+                           expires: expireDate,
+                           signingCredentials: credentials
+                                                     );
+
             JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
-            var token=handler.WriteToken(jwtSecurity);
-            return token;
+            var token = handler.WriteToken(jwtSecurity);
+            return new JwtAuthResult { AccessToken = token, ExpireAt = expireDate };
         }
 
-        public async Task<AccountDetailsDto> UpdateAccount(UpdateAccountDto updateAccount)
-        {
-            var userId= _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(a=>a.Type==ClaimTypes.NameIdentifier)?.Value;
-           
-            var user=await _user.FindByIdAsync(userId);
-            user.UserName=updateAccount.Name;
-            user.Email=updateAccount.Email;
-            var checkOp=await _user.UpdateAsync(user);
-            if (checkOp.Succeeded)
-            {
-                return new AccountDetailsDto
-                {
-                    Name = user.UserName,
-                    Email = user.Email,
-                };
-               
-            }
-            return null;
-           
-        }
-        public async Task<string>ChangePassword(PasswordChangeDto passwordChange)
-        {
-          
-            var userId= _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(a=>a.Type==ClaimTypes.NameIdentifier)?.Value;  
-            var user=await _user.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return "User not found.";
-            } 
-            var checkOldPassword = await _user.CheckPasswordAsync(user,passwordChange.OldPassword);
-            if (checkOldPassword==false)
-            {
-                return "Invalid Password";
-            }
-            if (string.IsNullOrWhiteSpace(passwordChange.NewPassword) || passwordChange.NewPassword.Length < 6)
-            {
-                return "Password must be at least 6 characters long.";
-            }
-            var token = await _user.GeneratePasswordResetTokenAsync(user);
-            var result = await _user.ResetPasswordAsync(user, token, passwordChange.NewPassword);
-            if (!result.Succeeded)
-            {
-                return "Failed to change password: " + string.Join(", ", result.Errors.Select(e => e.Description));
-            }
-            return "password changed successfully";
-        }
     }
 }

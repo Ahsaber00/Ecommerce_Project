@@ -9,21 +9,21 @@ namespace Ecommerse_Project.DAL.Entities
 {
     public class Address
     {
-      
-      
-        public int Id {  get; set; }
+
+
+        public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        public string Country { get; set; }
+        public string? Country { get; set; }
         [MaxLength(100)]
-        public string State {  get; set; }
-        [MaxLength(100)]
-        [Required]
-        public string City { get; set; }
+        public string? State { get; set; }
         [MaxLength(100)]
         [Required]
-        public string Street {  get; set; }
-       public int CustomerId {  get; set; }
+        public string? City { get; set; }
+        [MaxLength(100)]
+        [Required]
+        public string? Street { get; set; }
+        public string? ApplicationUserId { get; set; }
 
     }
 }

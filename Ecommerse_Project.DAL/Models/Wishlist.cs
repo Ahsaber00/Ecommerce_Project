@@ -9,7 +9,7 @@ namespace Ecommerse_Project.DAL.Entities
     public class Wishlist
     {
         public int Id { get; set; }
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public ICollection<WishListProduct> Products { get; set; }
 
 

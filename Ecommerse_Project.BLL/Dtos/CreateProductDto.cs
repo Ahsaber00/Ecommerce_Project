@@ -20,7 +20,7 @@ namespace Ecommerse_Project.BLL.Dtos
         public string Size { get; set; }
         [Required]
         public int SubCategoryId { get; set; }
-        public int AdminID { get; set; }
+        public string AdminID { get; set; }
         public IFormFileCollection Images { get; set; }
     }
 }

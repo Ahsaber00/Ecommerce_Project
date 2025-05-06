@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerse_Project.BLL.Dtos.UserAuthenticationDtos
+namespace Ecommerse_Project.BLL.Dtos.UserDtos
 {
     public class JwtSettings
     {
         public string Key { get; set; }
         public string Issuer { get; set; }
         public string Audience { get; set; }
+        public int DurationInDays { get; set; }
     }
 }
 

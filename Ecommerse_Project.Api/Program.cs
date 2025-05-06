@@ -1,6 +1,6 @@
 using System.Text;
 using Ecommerce__Project.Api.Mappings;
-using Ecommerse_Project.BLL.Dtos.UserAuthenticationDtos;
+using Ecommerse_Project.BLL.Dtos.UserDtos;
 using Ecommerse_Project.BLL.Interfaces;
 using Ecommerse_Project.BLL.Manager;
 using Ecommerse_Project.BLL.Services;
@@ -46,8 +46,7 @@ builder.Services.AddSingleton<IFileProvider>(provider =>
 
 builder.Services.AddScoped<IImageManagementService,ImageManagementService>();
 
-
-// Register managers
+builder.Services.AddScoped<IaccountManager, AccountManager>();
 builder.Services.AddScoped<IProductManager, ProductManager>();
 builder.Services.AddScoped<ICategoryManager, CategoryManager>();
 //builder.Services.AddScoped<IImageManager, ImageManager>();
@@ -62,16 +61,20 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
-  
+    var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+    var key = Encoding.ASCII.GetBytes(jwtSettings.Key);
+
     options.TokenValidationParameters = new TokenValidationParameters
-    { IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = false,
-        ValidateAudience = false
-   
-       
-       
+    {
+
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+
+
+
     };
 });
 

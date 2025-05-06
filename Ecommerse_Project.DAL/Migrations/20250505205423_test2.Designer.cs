@@ -4,6 +4,7 @@ using Ecommerse_Project.DAL.Dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerse_Project.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250505205423_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +33,6 @@ namespace Ecommerse_Project.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -43,7 +43,11 @@ namespace Ecommerse_Project.DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -54,9 +58,46 @@ namespace Ecommerse_Project.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Addresss");
+                });
+
+            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Admin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@example.com",
+                            Name = "Admin User",
+                            Password = "hashedpassword"
+                        });
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.ApplicationUser", b =>
@@ -71,23 +112,12 @@ namespace Ecommerse_Project.DAL.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -112,9 +142,6 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -136,10 +163,6 @@ namespace Ecommerse_Project.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("ApplicationUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Cart", b =>
@@ -150,9 +173,8 @@ namespace Ecommerse_Project.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -263,6 +285,63 @@ namespace Ecommerse_Project.DAL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<DateTime>("RegisterDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.CustomerProductReview", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "CustomerId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerProductReviews");
+                });
+
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -300,9 +379,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -366,9 +444,8 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.Property<DateTime>("AddedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("AdminId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("AdminID")
+                        .HasColumnType("int");
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -406,7 +483,7 @@ namespace Ecommerse_Project.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdminId");
+                    b.HasIndex("AdminID");
 
                     b.HasIndex("CategoryId");
 
@@ -416,8 +493,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6126),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6432),
+                            AdminID = 1,
                             Brand = "Nike",
                             CategoryId = 4,
                             Color = "Black",
@@ -431,8 +508,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 2,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6185),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6497),
+                            AdminID = 1,
                             Brand = "Adidas",
                             CategoryId = 4,
                             Color = "White",
@@ -446,8 +523,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 3,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6193),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6500),
+                            AdminID = 1,
                             Brand = "Ralph Lauren",
                             CategoryId = 5,
                             Color = "Light Blue",
@@ -461,8 +538,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 4,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6198),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6503),
+                            AdminID = 1,
                             Brand = "Tommy Hilfiger",
                             CategoryId = 5,
                             Color = "White",
@@ -476,8 +553,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 5,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6202),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6506),
+                            AdminID = 1,
                             Brand = "Levi's",
                             CategoryId = 6,
                             Color = "Dark Blue",
@@ -491,8 +568,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 6,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6208),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6511),
+                            AdminID = 1,
                             Brand = "Diesel",
                             CategoryId = 6,
                             Color = "Black",
@@ -506,8 +583,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 7,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6213),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6514),
+                            AdminID = 1,
                             Brand = "Nike",
                             CategoryId = 7,
                             Color = "White",
@@ -521,8 +598,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 8,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6217),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6516),
+                            AdminID = 1,
                             Brand = "Timberland",
                             CategoryId = 7,
                             Color = "Brown",
@@ -536,8 +613,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 9,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6222),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6519),
+                            AdminID = 1,
                             Brand = "Zara",
                             CategoryId = 8,
                             Color = "Red",
@@ -551,8 +628,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 10,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6227),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6566),
+                            AdminID = 1,
                             Brand = "H&M",
                             CategoryId = 8,
                             Color = "Black",
@@ -566,8 +643,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 11,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6232),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6569),
+                            AdminID = 1,
                             Brand = "Mango",
                             CategoryId = 9,
                             Color = "Pink",
@@ -581,8 +658,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 12,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6236),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6572),
+                            AdminID = 1,
                             Brand = "Forever 21",
                             CategoryId = 9,
                             Color = "White",
@@ -596,8 +673,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 13,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6240),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6575),
+                            AdminID = 1,
                             Brand = "Zara",
                             CategoryId = 10,
                             Color = "Black",
@@ -611,8 +688,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 14,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6244),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6577),
+                            AdminID = 1,
                             Brand = "H&M",
                             CategoryId = 10,
                             Color = "Beige",
@@ -626,8 +703,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 15,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6248),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6580),
+                            AdminID = 1,
                             Brand = "Aldo",
                             CategoryId = 11,
                             Color = "Nude",
@@ -641,8 +718,8 @@ namespace Ecommerse_Project.DAL.Migrations
                         new
                         {
                             Id = 16,
-                            AddedAt = new DateTime(2025, 5, 6, 1, 17, 53, 313, DateTimeKind.Local).AddTicks(6253),
-                            AdminId = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
+                            AddedAt = new DateTime(2025, 5, 5, 23, 54, 23, 580, DateTimeKind.Local).AddTicks(6583),
+                            AdminID = 1,
                             Brand = "Steve Madden",
                             CategoryId = 11,
                             Color = "Red",
@@ -699,9 +776,8 @@ namespace Ecommerse_Project.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CustomerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -843,45 +919,13 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Admin", b =>
-                {
-                    b.HasBaseType("Ecommerse_Project.DAL.Entities.ApplicationUser");
-
-                    b.HasDiscriminator().HasValue("Admin");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "5af94c3a-351b-4d4e-b751-faf9c535bac1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "db1aee00-bf5f-42de-b489-4425d49a16e8",
-                            Email = "Admin@mail.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAENvThIkEjuqQrmfR94dntYlpbazGff59RmforO4piDe2lnM6Z81exgKu/QS0docypA==",
-                            PhoneNumberConfirmed = false,
-                            Role = 0,
-                            SecurityStamp = "d938599f-f5b1-4a91-af84-281054911ba5",
-                            TwoFactorEnabled = false,
-                            UserName = "Admin"
-                        });
-                });
-
-            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Customer", b =>
-                {
-                    b.HasBaseType("Ecommerse_Project.DAL.Entities.ApplicationUser");
-
-                    b.Property<DateTime>("RegisterDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Address", b =>
                 {
-                    b.HasOne("Ecommerse_Project.DAL.Entities.ApplicationUser", null)
-                        .WithMany("Address")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("Ecommerse_Project.DAL.Entities.Customer", null)
+                        .WithMany("Addresses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Cart", b =>
@@ -898,7 +942,7 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasOne("Ecommerse_Project.DAL.Entities.Cart", "Cart")
                         .WithMany("Products")
                         .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ecommerse_Project.DAL.Entities.Product", "Product")
@@ -919,6 +963,25 @@ namespace Ecommerse_Project.DAL.Migrations
                         .HasForeignKey("ParentCategoryId");
 
                     b.Navigation("ParentCategory");
+                });
+
+            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.CustomerProductReview", b =>
+                {
+                    b.HasOne("Ecommerse_Project.DAL.Entities.Customer", "Customer")
+                        .WithMany("ProductReviews")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerse_Project.DAL.Entities.Product", "Product")
+                        .WithMany("CustomerReviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Image", b =>
@@ -962,7 +1025,7 @@ namespace Ecommerse_Project.DAL.Migrations
                 {
                     b.HasOne("Ecommerse_Project.DAL.Entities.Admin", null)
                         .WithMany("Products")
-                        .HasForeignKey("AdminId")
+                        .HasForeignKey("AdminID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -980,13 +1043,13 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasOne("Ecommerse_Project.DAL.Entities.Product", "Product")
                         .WithMany("WishLists")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ecommerse_Project.DAL.Entities.Wishlist", "Wishlist")
                         .WithMany("Products")
                         .HasForeignKey("WishlistId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -1054,9 +1117,9 @@ namespace Ecommerse_Project.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Admin", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Cart", b =>
@@ -1071,9 +1134,25 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.Navigation("SubCategories");
                 });
 
+            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Customer", b =>
+                {
+                    b.Navigation("Addresses");
+
+                    b.Navigation("Carts")
+                        .IsRequired();
+
+                    b.Navigation("OrderList");
+
+                    b.Navigation("ProductReviews");
+
+                    b.Navigation("Wishlist");
+                });
+
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Product", b =>
                 {
                     b.Navigation("Carts");
+
+                    b.Navigation("CustomerReviews");
 
                     b.Navigation("Images");
 
@@ -1089,21 +1168,6 @@ namespace Ecommerse_Project.DAL.Migrations
             modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Wishlist", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Admin", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Ecommerse_Project.DAL.Entities.Customer", b =>
-                {
-                    b.Navigation("Carts")
-                        .IsRequired();
-
-                    b.Navigation("OrderList");
-
-                    b.Navigation("Wishlist");
                 });
 #pragma warning restore 612, 618
         }

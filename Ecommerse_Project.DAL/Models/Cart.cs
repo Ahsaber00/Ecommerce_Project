@@ -8,8 +8,8 @@ namespace Ecommerse_Project.DAL.Entities
 {
     public class Cart
     {
-        public int Id { get; set; } 
-        public int CustomerId {  get; set; }
+        public int Id { get; set; }
+        public string CustomerId { get; set; }
         public ICollection<CartProduct> Products { get; set; }
 
     }
