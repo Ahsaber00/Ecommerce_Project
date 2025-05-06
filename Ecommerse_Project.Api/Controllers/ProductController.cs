@@ -14,16 +14,12 @@ namespace Ecommerce__Project.Api.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IImageManagementService _imageManagementService;
+        
         private readonly IProductManager _productManager;
         private readonly ILogger<ProductController> _logger;
-        public ProductController(IUnitOfWork unitOfWork, IMapper mapper, IImageManagementService imageManagementService,IProductManager productManager, ILogger<ProductController> logger)
+        public ProductController(IProductManager productManager, ILogger<ProductController> logger)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _imageManagementService = imageManagementService;
+            
             _productManager = productManager;
             _logger = logger;
         }
