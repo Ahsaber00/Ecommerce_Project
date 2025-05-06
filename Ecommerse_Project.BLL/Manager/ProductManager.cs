@@ -93,11 +93,110 @@ namespace Ecommerse_Project.BLL.Manager
 
 
 
-        public async Task<IEnumerable<GetAllProductDto>> GetAllProductsAsync()
+        public async Task<PaginatedProductResultDto> GetAllProductsAsync(ProductFilterDto? filter)
         {
-            var products = await _unitOfWork.Products.GetAllAsync(p => p.Images, p => p.Category);
-            var result= _mapper.Map<List<GetAllProductDto>>(products);
-            return result;
+            var query = await _unitOfWork.Products.GetAllAsync(p => p.Images, p => p.Category);
+
+            // No filter is provided, return random products for the homepage
+            if (filter == null)
+            {
+                // Randomize the products (using Guid.NewGuid() for a random sort)
+                query = query.OrderBy(p => Guid.NewGuid());
+                var totalCount = await query.CountAsync();
+                var products = await query.Take(9).ToListAsync(); // Default page size for homepage
+                var productDtos = _mapper.Map<List<GetAllProductDto>>(products);
+
+                return new PaginatedProductResultDto
+                {
+                    TotalCount = totalCount,
+                    PageNumber = 1,
+                    PageSize = 9,
+                    Products = productDtos
+                };
+            }
+
+            // Apply filters if provided
+            if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
+            {
+                var searchTerm = filter.SearchTerm.Trim().ToLower();
+                query = query.Where(p =>
+                    p.Name.ToLower().Contains(searchTerm) || p.Description.ToLower().Contains(searchTerm));
+            }
+            if (filter.CategoryId.HasValue)
+            {
+                query = query.Where(p=>p.Category.ParentCategoryId==filter.CategoryId);
+            }
+
+            if (filter.SubcategoryId.HasValue)
+            {
+                query = query.Where(p => p.CategoryId==filter.SubcategoryId);
+            }
+
+            if (filter.Sizes != null && filter.Sizes.Any())
+            {
+                query = query.Where(p => filter.Sizes.Contains(p.Size));
+            }
+
+            if (filter.Colors != null && filter.Colors.Any())
+            {
+                query = query.Where(p => filter.Colors.Contains(p.Color));
+            }
+
+            if (filter.Brands != null && filter.Brands.Any())
+            {
+                query = query.Where(p => filter.Brands.Contains(p.Brand));
+            }
+
+            if (filter.MinPrice.HasValue)
+            {
+                query = query.Where(p => p.Price >= filter.MinPrice.Value);
+            }
+
+            if (filter.MaxPrice.HasValue)
+            {
+                query = query.Where(p => p.Price <= filter.MaxPrice.Value);
+            }
+
+            // Sorting
+            switch (filter.SortBy?.ToLower())
+            {
+                case "price-asc":
+                    query = query.OrderBy(p => p.Price);
+                    break;
+                case "price-desc":
+                    query = query.OrderByDescending(p => p.Price);
+                    break;
+                case "name":
+                    query = query.OrderBy(p => p.Name);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.Name); // Default sort by name for filtered results
+                    break;
+            }
+
+            
+            
+            int PageSize = filter.PageSize.Value;
+            int PageNumber = filter.PageNumber.Value;
+
+            //total count of filtered products before pagination
+            var totalCountFiltered = await query.CountAsync();
+
+            //Apply pagination
+            var filteredProducts=await query
+                .Skip((PageNumber - 1) * PageSize)
+                .Take(PageSize)
+                .ToListAsync();
+
+            var result=_mapper.Map<List<GetAllProductDto>>(filteredProducts);
+            return new PaginatedProductResultDto
+            {
+                TotalCount = totalCountFiltered,
+                PageNumber = PageNumber,
+                PageSize = PageSize,
+                Products = result
+            };
+
         }
 
 

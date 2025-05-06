@@ -29,11 +29,11 @@ namespace Ecommerce__Project.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]ProductFilterDto filter)
         {
             try
             {
-                var result = await _productManager.GetAllProductsAsync();
+                var result = await _productManager.GetAllProductsAsync(filter);
                 return Ok(result);
             }
             catch (Exception ex)
