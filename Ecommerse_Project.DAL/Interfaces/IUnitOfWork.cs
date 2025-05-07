@@ -13,6 +13,7 @@ namespace Ecommerse_Project.DAL.Interfaces
         public ICategoryRepository Categories { get; }
         public IImageRepository Images { get; }
         public IaccountReposatory Accounts { get; }
+        public ICartRepository CustomerCart { get; }
         public Task<bool> SaveAll();
     }
 }

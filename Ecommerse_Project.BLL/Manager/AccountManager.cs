@@ -133,10 +133,6 @@ namespace Ecommerse_Project.BLL.Manager
                   
                     phone = user.PhoneNumber,
 
-
-                
-
-
                 };
             
             

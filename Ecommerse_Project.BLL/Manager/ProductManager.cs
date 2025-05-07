@@ -26,9 +26,10 @@ namespace Ecommerse_Project.BLL.Manager
         }
 
 
-        public async Task<ProductDetailsDto> AddAsync(CreateProductDto productDto)
+        public async Task<ProductDetailsDto> AddAsync(string AdminId, CreateProductDto productDto)
         {
             var newProduct = _mapper.Map<Product>(productDto);
+            newProduct.AdminId = AdminId;   
 
             // Add product to database
             await _unitOfWork.Products.AddAsync(newProduct);
@@ -91,7 +92,28 @@ namespace Ecommerse_Project.BLL.Manager
 
         }
 
+        public async Task<DashboardResultDto> GetAllProductsDashboardAsync(DashboardPaginationProductsDto pagination)
+        {
+            var products=await _unitOfWork.Products.GetAllAsync();
+            products = products.OrderBy(p => p.Name);
+            int PageNumber=pagination.PageNumber;
+            int PageSize=pagination.PageSize;
 
+            //apply pagination
+            var paginatedProducts = await products.Skip((PageNumber-1)*PageSize).Take(PageSize).ToListAsync();
+            var result=_mapper.Map<List<DashboardPaginationProductsDto>>(paginatedProducts);
+            return new DashboardResultDto
+            {
+                PageNumber = PageNumber,
+                PageSize = PageSize,
+                Products = result
+
+            };
+
+            
+            
+
+        }
 
         public async Task<PaginatedProductResultDto> GetAllProductsAsync(ProductFilterDto? filter)
         {
@@ -200,7 +222,6 @@ namespace Ecommerse_Project.BLL.Manager
         }
 
 
-
         public async Task<ProductDetailsDto> GetByIdAsync(int id)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(id, p => p.Category, p => p.Images);
@@ -215,7 +236,7 @@ namespace Ecommerse_Project.BLL.Manager
 
 
 
-        public async Task<ProductDetailsDto> UpdateAsync(UpdateProductDto productDto)
+        public async Task<ProductDetailsDto> UpdateAsync(string AdminName, UpdateProductDto productDto)
         {
             var product = await _unitOfWork.Products.GetByIdAsync(productDto.Id);
             if (product == null)
@@ -264,6 +285,8 @@ namespace Ecommerse_Project.BLL.Manager
             }
 
             // Save updates
+            product.ModifiedAt = DateTime.UtcNow;
+            product.ModifiedBy = AdminName;
             _unitOfWork.Products.UpdateAsync(product);
             await _unitOfWork.SaveAll();
 
