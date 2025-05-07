@@ -19,7 +19,7 @@ namespace Ecommerse_Project.DAL.Dbcontext
             base.OnModelCreating(builder);
 
 
-            builder.ApplyConfiguration(new CartProductConfig());
+            
             builder.ApplyConfiguration(new WishListProductConfig());
           
 

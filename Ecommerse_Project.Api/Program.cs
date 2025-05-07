@@ -14,13 +14,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt")); 
@@ -43,16 +43,28 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //For image handling in the wwwroot
 builder.Services.AddSingleton<IFileProvider>(provider =>
     new PhysicalFileProvider(Path.Combine(builder.Environment.WebRootPath)));
-
 builder.Services.AddScoped<IImageManagementService,ImageManagementService>();
 
+//Managers Register
 builder.Services.AddScoped<IaccountManager, AccountManager>();
 builder.Services.AddScoped<IProductManager, ProductManager>();
 builder.Services.AddScoped<ICategoryManager, CategoryManager>();
-//builder.Services.AddScoped<IImageManager, ImageManager>();
+builder.Services.AddScoped<ICartManager,CartManager>();
 builder.Services.AddScoped<IuserAuthenticationManager, UserAuthenticationManager>();    
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();
 builder.Services.AddHttpContextAccessor();
+
+
+//register redis to make caching for the cart
+builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+{
+    var config = sp.GetRequiredService<IConfiguration>();
+    var configOptions = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
+    configOptions.AbortOnConnectFail = false;
+    return ConnectionMultiplexer.Connect(configOptions);
+});
+
+
 // Register authentication
 builder.Services.AddAuthentication(options =>
 {

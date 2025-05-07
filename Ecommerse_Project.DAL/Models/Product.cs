@@ -22,6 +22,8 @@ namespace Ecommerse_Project.DAL.Entities
         [Required]
         public int Stock { get; set; }
         public DateTime AddedAt { get; set; }
+        public string? ModifiedBy { get; set; }
+        public DateTime? ModifiedAt { get; set; }
 
 
         // ---------------- Additional Clothing Specific Fields ----------------
@@ -36,9 +38,10 @@ namespace Ecommerse_Project.DAL.Entities
         public int CategoryId { get; set; }
         public string AdminId { get; set; }
 
-        public virtual ICollection<CartProduct> Carts { get; set; }
+        //public virtual ICollection<CartProduct> Carts { get; set; }
         public virtual Category Category { get; set; }
 
+        public virtual Admin Admin { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<WishListProduct> WishLists { get; set; }
        

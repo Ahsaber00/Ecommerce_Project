@@ -7,6 +7,7 @@ using Ecommerse_Project.DAL.Interfaces;
 using Ecommerse_Project.DAL.Repositories.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Ecommerce__Project.Api.Controllers
 {
@@ -14,18 +15,29 @@ namespace Ecommerce__Project.Api.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IImageManagementService _imageManagementService;
+       
         private readonly IProductManager _productManager;
         private readonly ILogger<ProductController> _logger;
-        public ProductController(IUnitOfWork unitOfWork, IMapper mapper, IImageManagementService imageManagementService,IProductManager productManager, ILogger<ProductController> logger)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ProductController(IProductManager productManager, ILogger<ProductController> logger, IHttpContextAccessor httpContextAccessor)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _imageManagementService = imageManagementService;
             _productManager = productManager;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        [HttpGet("dashboard")]
+        public async Task<IActionResult> GetAllForDashboard([FromQuery]DashboardPaginationProductsDto pagination)
+        {
+            try
+            {
+                var products=await _productManager.GetAllProductsDashboardAsync(pagination);
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -66,7 +78,14 @@ namespace Ecommerce__Project.Api.Controllers
         {
             try
             {
-                var newProduct=await _productManager.AddAsync(createProductDto);
+                var AdminId = _httpContextAccessor.HttpContext.User.Claims
+               .FirstOrDefault(a => a.Type == ClaimTypes.NameIdentifier)?.Value;
+                if (AdminId == null)
+                {
+                    throw new ArgumentException("The Admin must be authenticated to add a product.");
+                }
+
+                var newProduct=await _productManager.AddAsync(AdminId,createProductDto);
                
                 return CreatedAtAction("GetById", new { id = newProduct.Id }, newProduct);
             }
@@ -85,7 +104,14 @@ namespace Ecommerce__Project.Api.Controllers
                 {
                     return BadRequest("Id mismatch.");
                 }
-                var product = await _productManager.UpdateAsync(updateProductDto);
+
+                var AdminName = _httpContextAccessor.HttpContext.User.Claims
+               .FirstOrDefault(a => a.Type == ClaimTypes.Name)?.Value;
+                if (AdminName == null)
+                {
+                    throw new ArgumentException("The Admin must be authenticated to update a product.");
+                }
+                var product = await _productManager.UpdateAsync(AdminName, updateProductDto);
                 return Ok(product);
 
             }

@@ -10,10 +10,11 @@ namespace Ecommerse_Project.BLL.Manager
 {
     public interface IProductManager
     {
+        Task<DashboardResultDto> GetAllProductsDashboardAsync(DashboardPaginationProductsDto pagination);
         Task<PaginatedProductResultDto> GetAllProductsAsync(ProductFilterDto? filter);
         Task<ProductDetailsDto> GetByIdAsync(int id);
-        Task<ProductDetailsDto> AddAsync(CreateProductDto productDto);
-        Task<ProductDetailsDto>UpdateAsync(UpdateProductDto productDto);
+        Task<ProductDetailsDto> AddAsync(string AdminId,CreateProductDto productDto);
+        Task<ProductDetailsDto>UpdateAsync(string AdminId,UpdateProductDto productDto);
         Task<bool> DeleteAsync(int id);
     }
 }

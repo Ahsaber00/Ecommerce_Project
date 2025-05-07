@@ -26,6 +26,11 @@ namespace Ecommerce__Project.Api.Mappings
                 .ForMember(dest=>dest.CategoryId,opt=>opt.MapFrom(src=>src.SubCategoryId))
                 .ReverseMap();
 
+            CreateMap<Product, DashboardProductDto>().ForMember(pDto => pDto.CategoryName,
+                opt => opt.MapFrom(p => p.Category.Name))
+                .ForMember(pDto => pDto.AdminName,
+                opt => opt.MapFrom(p => p.Admin.FirstName));
+
         }
     }
 }
