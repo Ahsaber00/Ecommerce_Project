@@ -17,7 +17,7 @@ namespace Ecommerse_Project.DAL.Entities
         [Required]
         [MaxLength(100)]
         public string PaymentMethod {  get; set; }
-        public Order Order { get; set; }
+        //public Order Order { get; set; }
 
     }
 }

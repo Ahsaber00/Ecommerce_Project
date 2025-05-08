@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using Ecommerse_Project.DAL.Entities;
+using Ecommerse_Project.DAL.Models.Order;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -64,7 +66,10 @@ namespace Ecommerse_Project.DAL.Dbcontext
 
     
             builder.Entity<Category>().HasData(categories);
+            
            
+
+
 
 
 
@@ -77,12 +82,17 @@ namespace Ecommerse_Project.DAL.Dbcontext
         public DbSet<Category> Categories { get; set; }
         public DbSet <Wishlist> Wishlist { get; set; }
         public DbSet<Admin> Admins { get; set; }
-
         public DbSet<Image> Images { get; set; }
-        public DbSet<Order> Orders { get; set; }
         public DbSet<Paymen>Paymens { get; set; }
         public DbSet<TrackingDetails> TrackingDetails { get; set; } 
         public DbSet<WishListProduct> WishListProducts { get; set; }
+
+
+        // Add these new DbSet entries for the order-related models
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+        public DbSet<ShippingAddress> ShippingAddresses { get; set; }
 
     }
     
