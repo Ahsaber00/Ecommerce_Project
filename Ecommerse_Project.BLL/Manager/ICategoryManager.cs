@@ -10,7 +10,7 @@ namespace Ecommerse_Project.BLL.Manager
 {
     public interface ICategoryManager
     {
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<IEnumerable<GetAllCategoriesDto>> GetAllAsync();
         Task<Category> GetByIdAsync(int id);
         Task<Category> AddAsync(CreateCategoryDto category);
         Task<Category> UpdateAsync(UpdateCategoryDto category);
