@@ -31,6 +31,7 @@ namespace Ecommerce__Project.Api.Mappings
                 .ForMember(pDto => pDto.AdminName,
                 opt => opt.MapFrom(p => p.Admin.FirstName));
 
+
         }
     }
 }
