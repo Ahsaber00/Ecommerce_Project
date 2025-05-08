@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,32 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // Add JWT Authentication support in Swagger
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please insert JWT with Bearer into field (e.g., 'Bearer <token>')",
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+           {
+                new OpenApiSecurityScheme
+                {
+                      Reference = new OpenApiReference
+                      {
+                           Type = ReferenceType.SecurityScheme,
+                           Id = "Bearer"
+                      }
+                },
+                        new string[] {}
+           }
+    });
+});
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt")); 
 builder.Services.AddDbContext<ApplicationContext>(option =>
 {

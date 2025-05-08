@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ecommerse_Project.DAL.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerse_Project.DAL.Entities
@@ -24,6 +25,7 @@ namespace Ecommerse_Project.DAL.Entities
         public DateTime AddedAt { get; set; }
         public string? ModifiedBy { get; set; }
         public DateTime? ModifiedAt { get; set; }
+        public TargetAudience TargetAudience { get; set; }
 
 
         // ---------------- Additional Clothing Specific Fields ----------------

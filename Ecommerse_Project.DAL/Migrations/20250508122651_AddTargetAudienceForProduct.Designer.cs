@@ -4,6 +4,7 @@ using Ecommerse_Project.DAL.Dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerse_Project.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250508122651_AddTargetAudienceForProduct")]
+    partial class AddTargetAudienceForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -455,7 +458,6 @@ namespace Ecommerse_Project.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId")
@@ -637,16 +639,16 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "fbe5a51d-4f62-4bca-b3f8-2677ebf030d1",
+                            Id = "12ef705b-af21-4b03-ada7-a14fb66965a1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6c244a46-f3dc-44cb-be18-47df80a006dc",
+                            ConcurrencyStamp = "1ee9f878-b60c-4898-8281-a938612c13d3",
                             Email = "Admin@mail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAEC9l++zzOYNQyZoI6rs+H1wEIhzIsEoeBS5yvorIJVEQatHJSHkJ8mrb0+UtstLfCQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMtyRGbtIIUbnVhI+ju8MdWA9LPTN+mdAtDTpXjZQ01aCHZGl4/2uR4Wr/zxI/wl0w==",
                             PhoneNumberConfirmed = false,
                             Role = 0,
-                            SecurityStamp = "18ec94cb-dbdb-4038-888b-4585daff1710",
+                            SecurityStamp = "eb6df624-24fb-41bc-a998-5d23d3eb0d3f",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
