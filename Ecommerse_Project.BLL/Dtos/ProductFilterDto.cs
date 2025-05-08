@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecommerse_Project.DAL.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Ecommerse_Project.BLL.Dtos
         public string? SearchTerm { get; set; }
         public int? CategoryId { get; set; }
         public int? SubcategoryId { get; set; }
+        public TargetAudience? TargetAudience { get; set; }
         public List<string>? Sizes { get; set; }
         public List<string>? Colors { get; set; }
         public List<string>? Brands { get; set; }
