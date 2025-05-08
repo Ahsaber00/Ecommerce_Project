@@ -40,9 +40,26 @@ namespace Ecommerse_Project.BLL.Manager
             return true;
         }
 
-        public async Task<IEnumerable<Category>> GetAllAsync()
+        public async Task<IEnumerable<GetAllCategoriesDto>> GetAllAsync()
         {
-            return await _unitOfWork.Categories.GetAllAsync();
+            //return await _unitOfWork.Categories.GetAllAsync(c=>c.SubCategories);
+            var categories = await _unitOfWork.Categories.GetAllAsync(c => c.SubCategories); // Include subcategories
+
+            var categoryDtos = categories.Select(c => new GetAllCategoriesDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                ParentCategoryId = c.ParentCategoryId,
+                SubCategories = c.SubCategories
+                    .Where(sc => sc.ParentCategoryId == c.Id)
+                    .Select(sc => new SubCategoryDto
+                    {
+                        Id = sc.Id,
+                        Name = sc.Name
+                    }).ToList()
+            }).ToList();
+
+            return categoryDtos;
         }
 
         public async Task<Category> GetByIdAsync(int id)
