@@ -10,6 +10,5 @@ namespace Ecommerse_Project.DAL.Enums
     {
         Men = 1,
         Women = 2,
-        Unisex = 3
     }
 }
