@@ -23,6 +23,21 @@ namespace Ecommerse_Project.BLL.Manager
         {
             
             var cart=await _unitOfWork.CustomerCart.GetCartAsync(userId);
+            if (cart == null)
+            {
+                cart = new CustomerCart
+                {
+                    CustomerId = userId,
+                    cartItems = new List<CartItem>()
+
+                };
+            }
+
+            if(cart.cartItems==null)
+            {
+                cart.cartItems = new List<CartItem>();
+            }
+
             var existingItem = cart.cartItems.FirstOrDefault(p => p.ProductId == cartItem.ProductId);
             if (existingItem!=null)
             {
@@ -50,6 +65,7 @@ namespace Ecommerse_Project.BLL.Manager
                 cart.cartItems.Remove(existingItem);
                 await _unitOfWork.CustomerCart.SaveCartAsync(userId, cart);
             }
+            throw new ArgumentException("Product does not exist in the cart");
             
         }
     }
