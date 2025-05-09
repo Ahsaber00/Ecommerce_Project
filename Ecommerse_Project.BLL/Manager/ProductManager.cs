@@ -94,14 +94,14 @@ namespace Ecommerse_Project.BLL.Manager
 
         public async Task<DashboardResultDto> GetAllProductsDashboardAsync(DashboardPaginationProductsDto pagination)
         {
-            var products=await _unitOfWork.Products.GetAllAsync();
+            var products=await _unitOfWork.Products.GetAllAsync(p=>p.Category,p=>p.Admin,p=>p.Images);
             products = products.OrderBy(p => p.Name);
             int PageNumber=pagination.PageNumber;
             int PageSize=pagination.PageSize;
 
             //apply pagination
             var paginatedProducts = await products.Skip((PageNumber-1)*PageSize).Take(PageSize).ToListAsync();
-            var result=_mapper.Map<List<DashboardPaginationProductsDto>>(paginatedProducts);
+            var result=_mapper.Map<List<DashboardProductDto>>(paginatedProducts);
             return new DashboardResultDto
             {
                 PageNumber = PageNumber,
@@ -109,9 +109,6 @@ namespace Ecommerse_Project.BLL.Manager
                 Products = result
 
             };
-
-            
-            
 
         }
 

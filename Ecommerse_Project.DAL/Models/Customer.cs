@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ecommerse_Project.DAL.Models;
+using Ecommerse_Project.DAL.Models.Order;
 using Ecommerse_Project.DAL.RedisModels;
 
 namespace Ecommerse_Project.DAL.Entities

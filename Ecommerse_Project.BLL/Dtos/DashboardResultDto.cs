@@ -10,6 +10,6 @@ namespace Ecommerse_Project.BLL.Dtos
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
-        public List<DashboardPaginationProductsDto> Products { get; set; }
+        public List<DashboardProductDto> Products { get; set; }
     }
 }

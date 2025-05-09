@@ -48,7 +48,7 @@ namespace Ecommerse_Project.BLL.Manager
             var address = new Address
             {
                 City = addressDto.City,
-                State = addressDto.State,
+                Governorate = addressDto.Governorate,
                 Country = addressDto.Country,
                 Street = addressDto.Street,
                 ApplicationUserId = userId,
@@ -61,7 +61,7 @@ namespace Ecommerse_Project.BLL.Manager
             return new AddressDto
             {
                 City = address.City,
-                State = address.State,
+                Governorate = address.Governorate,
                 Country = address.Country,
                 Street = address.Street
             };
@@ -81,7 +81,7 @@ namespace Ecommerse_Project.BLL.Manager
             var adress=user_adress.Address.FirstOrDefault(a=>a.ApplicationUserId == userId);    
             if(adress == null) { return null; }
             adress.Street=addressDto.Street;
-            adress.State = addressDto.State;
+            adress.Governorate = addressDto.Governorate;
             adress.Country = addressDto.Country;
             adress.City = addressDto.City;
             await _unitOfWork.SaveAll();
@@ -185,7 +185,7 @@ namespace Ecommerse_Project.BLL.Manager
                 {
                     Street = a.Street,
                     City = a.City,
-                    State = a.State,
+                    Governorate = a.Governorate,
                     Country = a.Country
                 }).ToList()
 
