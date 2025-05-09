@@ -60,7 +60,7 @@ namespace Ecommerse_Project.BLL.Manager
 
         public async Task<AuthResult> Register(RegisterDto register)
         {
-            ApplicationUser user = new Admin();
+            ApplicationUser user = new ApplicationUser();
 
             user.UserName = register.Name;
             user.Email = register.Email;
