@@ -14,6 +14,7 @@ namespace Ecommerse_Project.DAL.Interfaces
         public IImageRepository Images { get; }
         public IaccountReposatory Accounts { get; }
         public ICartRepository CustomerCart { get; }
+        public IOrderRepository Orders { get; }
         public Task<bool> SaveAll();
     }
 }

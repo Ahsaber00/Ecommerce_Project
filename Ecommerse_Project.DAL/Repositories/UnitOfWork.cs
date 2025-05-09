@@ -13,6 +13,7 @@ namespace Ecommerse_Project.DAL.Repositories
     public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationContext _context;
+
         private readonly IConnectionMultiplexer _redis;
         public IProductRepository Products { get; }
 
@@ -23,6 +24,8 @@ namespace Ecommerse_Project.DAL.Repositories
 
         public ICartRepository CustomerCart { get; }
 
+        public IOrderRepository Orders {get; }
+
         public UnitOfWork(ApplicationContext context, IConnectionMultiplexer redis)
         {
             _redis=redis;
@@ -31,6 +34,7 @@ namespace Ecommerse_Project.DAL.Repositories
             Categories = new CategoryRepository(_context);
             Images = new ImageRepository(_context);
             Accounts = new AccountReposatory(_context);
+            Orders= new OrderRepository(_context);
             CustomerCart = new CartRepository(_redis);
         }
 

@@ -134,8 +134,18 @@ namespace Ecommerse_Project.BLL.Manager
                 };
             }
 
+            //Search
+            if (!string.IsNullOrEmpty(filter.SearchTerm))
+            {
+                var term = filter.SearchTerm.Trim().ToLower();
+                query = query.Where(p =>
+                p.Name.ToLower().Contains(term) ||
+                p.Description.ToLower().Contains(term) ||
+                p.Brand.ToLower().Contains(term));
+            }
+
             //Filtering by main category (Men,Women)
-            if(filter.CategoryId.HasValue)
+            if (filter.CategoryId.HasValue)
             {
                 query=query.Where(p=>p.Category.ParentCategoryId == filter.CategoryId);
             }
@@ -151,11 +161,6 @@ namespace Ecommerse_Project.BLL.Manager
             {
                 query = query.Where(p => p.TargetAudience == filter.TargetAudience.Value);
             }
-            //else if (filter.CategoryId.HasValue)
-            //{
-            //    // Get products under any subcategory of the main category
-            //    query = query.Where(p => p.Category.ParentCategoryId == filter.CategoryId);
-            //}
 
             if (filter.Sizes != null && filter.Sizes.Any())
             {
