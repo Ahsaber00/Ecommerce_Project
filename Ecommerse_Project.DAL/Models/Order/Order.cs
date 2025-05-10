@@ -1,6 +1,7 @@
 ﻿using Ecommerse_Project.DAL.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,9 @@ namespace Ecommerse_Project.DAL.Models.Order
 {
     public class Order
     {
+        [Key]
         public int Id { get; set; }
+        
         public string BuyerEmail { get; set; }
         public decimal OrderPrice {  get; set; }
         public decimal TotalPrice {  get; set; }

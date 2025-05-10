@@ -25,7 +25,7 @@ namespace Ecommerse_Project.DAL.Repositories
         public async Task<CustomerCart> GetCartAsync(string userId)
         {
             var cartData= await _database.StringGetAsync(userId);
-            return cartData.IsNullOrEmpty  ? new CustomerCart { CustomerId = userId } : JsonSerializer.Deserialize<CustomerCart>(cartData);
+            return cartData.IsNullOrEmpty  ? new CustomerCart { Id=1,CustomerId = userId } : JsonSerializer.Deserialize<CustomerCart>(cartData);
         }
 
         public async Task SaveCartAsync(string userId, CustomerCart cart)

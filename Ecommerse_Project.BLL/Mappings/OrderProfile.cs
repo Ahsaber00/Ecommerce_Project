@@ -20,6 +20,7 @@ namespace Ecommerse_Project.BLL.Mappings
                 .ForMember(oDto => oDto.DeliveryPrice,
                 opt => opt.MapFrom(o => o.DeliveryMethod.Price));
             CreateMap<OrderItem, OrderItemDto>();
+            CreateMap<ShippingAddress, ShippingAddressDto>();
                 
              
         }
