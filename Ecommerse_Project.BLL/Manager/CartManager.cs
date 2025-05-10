@@ -21,12 +21,18 @@ namespace Ecommerse_Project.BLL.Manager
         }
         public async Task AddToCartAsync(string userId,CartItem cartItem)
         {
+            var product=await _unitOfWork.Products.GetByIdAsync(cartItem.ProductId);
+            if (product == null)
+            {
+                throw new Exception("Product is not found");
+            }
             
             var cart=await _unitOfWork.CustomerCart.GetCartAsync(userId);
             if (cart == null)
             {
                 cart = new CustomerCart
                 {
+                    Id=1,
                     CustomerId = userId,
                     cartItems = new List<CartItem>()
 
@@ -60,13 +66,14 @@ namespace Ecommerse_Project.BLL.Manager
         {
             var cart= await _unitOfWork.CustomerCart.GetCartAsync(userId);
             var existingItem= cart.cartItems.FirstOrDefault(p=>p.ProductId==productId);
-            if(existingItem!=null)
+            if(existingItem==null)
             {
-                cart.cartItems.Remove(existingItem);
-                await _unitOfWork.CustomerCart.SaveCartAsync(userId, cart);
+                throw new ArgumentException("Product does not exist in the cart");
             }
-            throw new ArgumentException("Product does not exist in the cart");
-            
+            cart.cartItems.Remove(existingItem);
+            await _unitOfWork.CustomerCart.SaveCartAsync(userId, cart);
+
+
         }
     }
 }

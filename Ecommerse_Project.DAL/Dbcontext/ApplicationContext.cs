@@ -27,10 +27,6 @@ namespace Ecommerse_Project.DAL.Dbcontext
 
             //category seeding
 
-
-
-
-
             var passwordHasher = new PasswordHasher<ApplicationUser>();
 
 
@@ -64,17 +60,39 @@ namespace Ecommerse_Project.DAL.Dbcontext
                  new Category { Id = 11, Name = "Heels", ParentCategoryId = 2 },
             };
 
+            List<DeliveryMethod> deliveryMethods = new List<DeliveryMethod>()
+            {
+                 new DeliveryMethod
+                 {
+                      Id = 1,
+                      Name = "Standard Delivery",
+                      Price = 20,
+                      DeliveryTime = "3-5 days",
+                      Description = "Standard delivery within 3 to 5 business days"
+                 },
+                new DeliveryMethod
+                {
+                    Id = 2,
+                    Name = "Express Delivery",
+                    Price = 50,
+                    DeliveryTime = "1-2 days",
+                    Description = "Fast delivery within 1 to 2 business days"
+                },
+                new DeliveryMethod
+                {
+                    Id = 3,
+                    Name = "Overnight Delivery",
+                    Price = 80,
+                    DeliveryTime = "Next day",
+                    Description = "Delivery by the next business day"
+                }
+            };
+
     
             builder.Entity<Category>().HasData(categories);
+            builder.Entity<DeliveryMethod>().HasData(deliveryMethods);
             
-           
-
-
-
-
-
-
-
+            
         }
         public DbSet<Customer> Customers {  get; set; }
         public DbSet<Address> Addresss { get; set; }

@@ -75,6 +75,7 @@ builder.Services.AddScoped<IImageManagementService,ImageManagementService>();
 builder.Services.AddScoped<IaccountManager, AccountManager>();
 builder.Services.AddScoped<IProductManager, ProductManager>();
 builder.Services.AddScoped<ICategoryManager, CategoryManager>();
+builder.Services.AddScoped<IOrderManager, OrderManager>();  
 builder.Services.AddScoped<ICartManager,CartManager>();
 builder.Services.AddScoped<IuserAuthenticationManager, UserAuthenticationManager>();    
 builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkStores<ApplicationContext>();

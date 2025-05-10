@@ -4,6 +4,7 @@ using Ecommerse_Project.DAL.Dbcontext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerse_Project.DAL.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250509225119_DeliveryMethodsSeeding")]
+    partial class DeliveryMethodsSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -421,32 +424,6 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DeliveryMethods");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DeliveryTime = "3-5 days",
-                            Description = "Standard delivery within 3 to 5 business days",
-                            Name = "Standard Delivery",
-                            Price = 20m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DeliveryTime = "1-2 days",
-                            Description = "Fast delivery within 1 to 2 business days",
-                            Name = "Express Delivery",
-                            Price = 50m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DeliveryTime = "Next day",
-                            Description = "Delivery by the next business day",
-                            Name = "Overnight Delivery",
-                            Price = 80m
-                        });
                 });
 
             modelBuilder.Entity("Ecommerse_Project.DAL.Models.Order.Order", b =>
@@ -707,16 +684,16 @@ namespace Ecommerse_Project.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7d679a88-4f0e-4d25-929c-6a0e186621a9",
+                            Id = "dbb033c6-44bb-4f8b-a34b-3a1a8a842a30",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e1cbe913-b61d-45e2-822b-0c82372b0eb3",
+                            ConcurrencyStamp = "fbfcbfc3-daf9-4c50-bebb-2d8cb15a1ddf",
                             Email = "Admin@mail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAIAAYagAAAAENzqC4jtmDFXwWVR7N/0v7bkM+5i+al0zeersv2Ll9iRXP75G/oUYQK4Bzrl2aTxJg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEo4vbG7fUyhL94hrFis3UU1Q/WuELWkSqbXNcXGNzUE14Z7UOOQZ9yuqToIXGFiqA==",
                             PhoneNumberConfirmed = false,
                             Role = 0,
-                            SecurityStamp = "b6871a98-e89b-411e-9ac9-f882542fc94b",
+                            SecurityStamp = "35eae7ee-cfa8-41b2-bcba-138a03c077fe",
                             TwoFactorEnabled = false,
                             UserName = "Admin"
                         });
