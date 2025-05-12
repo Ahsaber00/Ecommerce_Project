@@ -1,5 +1,6 @@
 ﻿using Ecommerse_Project.BLL.Manager;
 using Ecommerse_Project.DAL.RedisModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ namespace Ecommerce__Project.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CartController : ControllerBase
     {
         private readonly ICartManager _cartManager;
