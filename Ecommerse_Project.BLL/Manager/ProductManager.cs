@@ -91,7 +91,7 @@ namespace Ecommerse_Project.BLL.Manager
             return true;
 
         }
-
+        
         public async Task<DashboardResultDto> GetAllProductsDashboardAsync(DashboardPaginationProductsDto pagination)
         {
             var products=await _unitOfWork.Products.GetAllAsync(p=>p.Category,p=>p.Admin,p=>p.Images);
@@ -253,39 +253,45 @@ namespace Ecommerse_Project.BLL.Manager
             {
                 throw new Exception("Invalid Category");
             }
+            var maincategory = await _unitOfWork.Categories.GetByIdAsync(productDto.MainCategoryId);
+            if (maincategory == null)
+            {
+                throw new Exception("Invalid Category");
+            }
 
-            var mainCategory = category.ParentCategory.Name;
+
+            var mainCategory = maincategory.Name;
             var subCategory = category.Name;
 
             // Update product details
             _mapper.Map(productDto, product);
 
             // Delete old images if provided
-            if (productDto.Images != null)
-            {
-                if (product.Images.Any())
-                {
-                    var oldImages = product.Images.ToList();
-                    foreach (var image in oldImages)
-                    {
-                        // Delete from server and database
-                        _imageManagementService.DeleteImageAsync(image.Url);
-                        await _unitOfWork.Images.DeleteAsync(image.Id);
-                    }
-                }
+            //if (productDto.Images != null)
+            //{
+            //    if (product.Images.Any())
+            //    {
+            //        var oldImages = product.Images.ToList();
+            //        foreach (var image in oldImages)
+            //        {
+            //            // Delete from server and database
+            //            _imageManagementService.DeleteImageAsync(image.Url);
+            //            await _unitOfWork.Images.DeleteAsync(image.Id);
+            //        }
+            //    }
 
-                // Add new images
-                var imagePaths = await _imageManagementService.AddImageAsync(productDto.Images, mainCategory, subCategory, product.Id);
-                foreach (var path in imagePaths)
-                {
-                    var image = new Image
-                    {
-                        Url = path,
-                        ProductId = product.Id,
-                    };
-                    await _unitOfWork.Images.AddAsync(image);
-                }
-            }
+            //    // Add new images
+            //    var imagePaths = await _imageManagementService.AddImageAsync(productDto.Images, mainCategory, subCategory, product.Id);
+            //    foreach (var path in imagePaths)
+            //    {
+            //        var image = new Image
+            //        {
+            //            Url = path,
+            //            ProductId = product.Id,
+            //        };
+            //        await _unitOfWork.Images.AddAsync(image);
+            //    }
+            //}
 
             // Save updates
             product.ModifiedAt = DateTime.UtcNow;

@@ -39,6 +39,20 @@ namespace Ecommerce__Project.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("Get_All")]
+        public async Task<IActionResult> Get_All(ProductFilterDto filter)
+        {
+            try
+            {
+                var result = await _productManager.GetAllProductsAsync(filter);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery]ProductFilterDto filter)
@@ -96,7 +110,7 @@ namespace Ecommerce__Project.Api.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateProduct([FromRoute] int id, [FromForm] UpdateProductDto updateProductDto)
+        public async Task<IActionResult> UpdateProduct([FromRoute] int id,  UpdateProductDto updateProductDto)
         {
             try
             {
