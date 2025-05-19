@@ -9,6 +9,7 @@ namespace Ecommerse_Project.BLL.Dtos.UserDtos
 {
     public class AddressDto
     {
+        public int? Id { get; set; }
         public string Country { get; set; }
 
         public string Governorate { get; set; }

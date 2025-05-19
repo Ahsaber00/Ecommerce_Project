@@ -78,7 +78,7 @@ namespace Ecommerse_Project.BLL.Manager
             }
 
             var user_adress =await _unitOfWork.Accounts.GetByIdAsync(userId,a=>a.Address);
-            var adress=user_adress.Address.FirstOrDefault(a=>a.ApplicationUserId == userId);    
+            var adress=user_adress.Address.FirstOrDefault(a=>a.Id==addressDto.Id);    
             if(adress == null) { return null; }
             adress.Street=addressDto.Street;
             adress.Governorate = addressDto.Governorate;
@@ -90,6 +90,30 @@ namespace Ecommerse_Project.BLL.Manager
             return addressDto;
            
         }
+        public async Task<bool> DeleteAddress(int addressId)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(a => a.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            var user = await _user.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var userAccount = await _unitOfWork.Accounts.GetByIdAsync(userId, a => a.Address);
+            var address = userAccount.Address.FirstOrDefault(a => a.Id == addressId);
+            if (address == null)
+            {
+                return false;
+            }
+
+            userAccount.Address.Remove(address); // or _unitOfWork.Addresses.Remove(address) if using a repository
+            await _unitOfWork.SaveAll();
+
+            return true;
+        }
+
 
         public async Task<UpdateAccountDto> UpdateAccount(UpdateAccountDto updateAccount)
         {
@@ -183,6 +207,7 @@ namespace Ecommerse_Project.BLL.Manager
                 
                 Address = user_Adress.Address.Select(a => new AddressDto
                 {
+                    Id=a.Id,
                     Street = a.Street,
                     City = a.City,
                     Governorate = a.Governorate,

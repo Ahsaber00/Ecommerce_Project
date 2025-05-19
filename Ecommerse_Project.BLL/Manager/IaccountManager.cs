@@ -15,5 +15,6 @@ namespace Ecommerse_Project.BLL.Manager
         public Task<string> ChangePassword(PasswordChangeDto password) ;
         public  Task<AddressDto> AddAddress(AddressDto addressDto);
         public Task<AddressDto> UpdateAddress(AddressDto addressDto);
+        public Task<Boolean> DeleteAddress(int AddressId);
     }
 }

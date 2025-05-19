@@ -60,5 +60,12 @@ namespace Ecommerse_Project.Api.Controllers
             }
             return Ok(add_);
         }
+        [HttpDelete("DeleteAddress/{id}")]
+        public async Task<IActionResult>DeleteAddress(int id)
+        {
+            var delete=await _userManager.DeleteAddress(id);
+            if (delete==false) return BadRequest("failed to Delete Address");
+            else return Ok("Address Deleted Successfully");
+        }
     }
 }
