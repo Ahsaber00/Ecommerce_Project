@@ -86,7 +86,7 @@ namespace Ecommerse_Project.BLL.Manager
             //}
 
             // Delete the product
-            await _unitOfWork.Products.DeleteAsync(id);
+            await _unitOfWork.Products.SoftDeleteAsync(id);
             await _unitOfWork.SaveAll();
             return true;
 

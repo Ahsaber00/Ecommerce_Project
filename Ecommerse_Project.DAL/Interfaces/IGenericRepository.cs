@@ -17,5 +17,7 @@ namespace Ecommerse_Project.BLL.Interfaces
         public Task<T> GetByIdAsync(string id, params Expression<Func<T, object>>[] includes);
         void UpdateAsync(T entity);
         Task DeleteAsync(int id);
+        Task SoftDeleteAsync(int id);
+        Task SoftDeleteAsync(T entity);
     }
 }

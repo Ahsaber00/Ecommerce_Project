@@ -1,5 +1,6 @@
 using System.Text;
 using Ecommerce__Project.Api.Mappings;
+using Ecommerce__Project.Api.MiddleWare;
 using Ecommerse_Project.BLL.Dtos.UserDtos;
 using Ecommerse_Project.BLL.Interfaces;
 using Ecommerse_Project.BLL.Manager;
@@ -117,7 +118,14 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-
+// Add repositories
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<IaccountReposatory, AccountReposatory>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 var app = builder.Build();
 
@@ -128,6 +136,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<RateLimitingMiddleware>();
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

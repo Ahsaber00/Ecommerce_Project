@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerse_Project.DAL.Models.Order
 {
-    public class Order
+    public class Order:BaseEntity
     {
         [Key]
         public int Id { get; set; }

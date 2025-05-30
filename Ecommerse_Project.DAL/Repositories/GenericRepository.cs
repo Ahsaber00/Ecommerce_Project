@@ -1,5 +1,6 @@
 ﻿using Ecommerse_Project.BLL.Interfaces;
 using Ecommerse_Project.DAL.Dbcontext;
+using Ecommerse_Project.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,27 @@ namespace Ecommerse_Project.DAL.Repositories
         public void UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
+        }
+
+        public async Task SoftDeleteAsync(int id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+            if (entity != null && entity is BaseEntity baseEntity)
+            {
+                baseEntity.IsDeleted = true;
+                baseEntity.DeletedAt = DateTime.UtcNow;
+                _context.Set<T>().Update(entity);
+            }
+        }
+
+        public async Task SoftDeleteAsync(T entity)
+        {
+            if (entity != null && entity is BaseEntity baseEntity)
+            {
+                baseEntity.IsDeleted = true;
+                baseEntity.DeletedAt = DateTime.UtcNow;
+                _context.Set<T>().Update(entity);
+            }
         }
     }
 }

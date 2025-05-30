@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ecommerse_Project.DAL.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerse_Project.DAL.Entities
 {
-    public class Category
+    public class Category:BaseEntity
     {
         [Key]
         public int Id { get; set; }

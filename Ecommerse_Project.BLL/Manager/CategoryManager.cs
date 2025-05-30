@@ -35,7 +35,7 @@ namespace Ecommerse_Project.BLL.Manager
             {
                 return false;
             }
-            await _unitOfWork.Categories.DeleteAsync(id);
+            await _unitOfWork.Categories.SoftDeleteAsync(id);
             await _unitOfWork.SaveAll();
             return true;
         }

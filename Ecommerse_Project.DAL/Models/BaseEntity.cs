@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Ecommerse_Project.DAL.Models
 {
-    public class BaserEntity
+    public class BaseEntity
     {
         public int Id { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+        public DateTime ModifiedAt { get; set; } = DateTime.UtcNow;
+        public DateTime ?AddedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
         public bool IsDeleted { get; set; } = false;

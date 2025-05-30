@@ -5,14 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ecommerse_Project.DAL.Enums;
+using Ecommerse_Project.DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerse_Project.DAL.Entities
 {
-    public class Product
+    public class Product : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -22,11 +21,7 @@ namespace Ecommerse_Project.DAL.Entities
         public decimal Price { get; set; }
         [Required]
         public int Stock { get; set; }
-        public DateTime AddedAt { get; set; }
-        public string? ModifiedBy { get; set; }
-        public DateTime? ModifiedAt { get; set; }
         public TargetAudience TargetAudience { get; set; }
-
 
         // ---------------- Additional Clothing Specific Fields ----------------
         [Required]
@@ -36,17 +31,15 @@ namespace Ecommerse_Project.DAL.Entities
         public string Color { get; set; }
         public string Size { get; set; }
 
-
         public int CategoryId { get; set; }
         public string AdminId { get; set; }
+        public string? ModifiedBy { get; set; }
+        public DateTime AddedAt { get; set; }
+       
 
-        //public virtual ICollection<CartProduct> Carts { get; set; }
         public virtual Category Category { get; set; }
-
         public virtual Admin Admin { get; set; }
         public virtual ICollection<Image> Images { get; set; }
         public virtual ICollection<WishListProduct> WishLists { get; set; }
-       
-
     }
 }

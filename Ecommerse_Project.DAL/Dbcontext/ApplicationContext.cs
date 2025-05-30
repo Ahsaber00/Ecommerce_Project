@@ -9,6 +9,9 @@ using Ecommerse_Project.DAL.Models.Order;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Threading;
+using Ecommerse_Project.DAL.Models;
 
 namespace Ecommerse_Project.DAL.Dbcontext
 {
@@ -20,8 +23,9 @@ namespace Ecommerse_Project.DAL.Dbcontext
         {
             base.OnModelCreating(builder);
 
+            // Add soft delete filter for all entities that inherit from BaserEntity
+            new SoftDeleteFilter().Apply(builder);
 
-            
             builder.ApplyConfiguration(new WishListProductConfig());
           
 
@@ -112,6 +116,42 @@ namespace Ecommerse_Project.DAL.Dbcontext
         public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
         public DbSet<ShippingAddress> ShippingAddresses { get; set; }
 
+        public override int SaveChanges()
+        {
+            UpdateSoftDeleteStatuses();
+           return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateSoftDeleteStatuses();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void UpdateSoftDeleteStatuses()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is BaseEntity entity)
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Deleted:
+                            entry.State = EntityState.Modified;
+                            entity.IsDeleted = true;
+                            entity.DeletedAt = DateTime.UtcNow;
+                            break;
+                        case EntityState.Added:
+                            entity.AddedAt = DateTime.UtcNow;
+                            entity.IsDeleted = false;
+                            break;
+                        case EntityState.Modified:
+                            entity.UpdatedAt = DateTime.UtcNow;
+                            break;
+                    }
+                }
+            }
+        }
     }
     
    

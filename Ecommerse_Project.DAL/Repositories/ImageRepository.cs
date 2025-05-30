@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerse_Project.DAL.Repositories
+namespace Ecommerse_Project.DAL.Repositories 
 {
     public class ImageRepository : GenericRepository<Image>, IImageRepository
     {
